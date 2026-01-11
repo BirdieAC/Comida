@@ -5,55 +5,334 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Refeições</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .header { text-align: center; color: white; margin-bottom: 30px; }
-        .header h1 { font-size: 2.5em; margin-bottom: 10px; color: #ff6b35; }
-        .header p { font-size: 1.1em; opacity: 0.9; }
-        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .category-card { background: white; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 2px solid transparent; }
-        .category-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
-        .category-card.active { border-color: #ff6b35; background: #fff5f0; }
-        .category-icon { font-size: 2em; margin-bottom: 10px; }
-        .category-name { font-weight: bold; font-size: 1.1em; color: #333; margin-bottom: 5px; }
-        .category-count { font-size: 0.9em; color: #666; }
-        .selector-section { background: white; border-radius: 12px; padding: 30px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .selector-section h2 { color: #666; margin-bottom: 20px; font-size: 1.8em; }
-        .selected-dish { font-size: 2.5em; color: #ff6b35; margin-bottom: 20px; min-height: 60px; display: flex; align-items: center; justify-content: center; }
-        .button-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        button { padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-        .btn-select { background: #ff6b35; color: white; flex: 1; min-width: 200px; }
-        .btn-select:hover { background: #e55a25; transform: scale(1.05); }
-        .btn-select:active { transform: scale(0.98); }
-        .add-section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .add-section h3 { color: #333; margin-bottom: 20px; font-size: 1.3em; }
-        .form-group { margin-bottom: 15px; }
-        .form-row { display: grid; grid-template-columns: 1fr 150px; gap: 10px; margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: #333; font-weight: 500; font-size: 0.95em; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 1em; font-family: inherit; transition: border-color 0.2s; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1); }
-        textarea { grid-column: 1 / -1; min-height: 80px; resize: vertical; }
-        select { cursor: pointer; }
-        .btn-add { background: #667eea; color: white; padding: 12px 40px; width: 100%; grid-column: 1 / -1; font-weight: bold; }
-        .btn-add:hover { background: #5568d3; }
-        .lists-section { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .lists-header { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .list-tab { padding: 10px 20px; border: none; background: #f0f0f0; cursor: pointer; border-radius: 6px; font-weight: 500; transition: all 0.2s; color: #666; }
-        .list-tab.active { background: #ff6b35; color: white; }
-        .list-tab:hover { background: #e0e0e0; }
-        .list-tab.active:hover { background: #e55a25; }
-        .items-list { display: none; }
-        .items-list.active { display: block; }
-        .item { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
-        .item:hover { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .item-info h4 { color: #333; margin-bottom: 5px; }
-        .item-category { font-size: 0.85em; color: #999; }
-        .item-recipe { font-size: 0.9em; color: #666; margin-top: 5px; font-style: italic; }
-        .btn-delete { background: #ff4757; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em; transition: background 0.2s; }
-        .btn-delete:hover { background: #ff3838; }
-        .empty-message { text-align: center; color: #999; padding: 30px; font-style: italic; }
-        @media (max-width: 600px) { .header h1 { font-size: 2em; } .form-row { grid-template-columns: 1fr; } .categories { grid-template-columns: 1fr; } .selected-dish { font-size: 2em; } }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ff6b35;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .category-card.active {
+            border-color: #ff6b35;
+            background: #fff5f0;
+        }
+
+        .category-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .category-count {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .selector-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .selector-section h2 {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .selected-dish {
+            font-size: 2.5em;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-select {
+            background: #ff6b35;
+            color: white;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn-select:hover {
+            background: #e55a25;
+            transform: scale(1.05);
+        }
+
+        .btn-select:active {
+            transform: scale(0.98);
+        }
+
+        .add-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .add-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 150px;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        textarea {
+            grid-column: 1 / -1;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: #667eea;
+            color: white;
+            padding: 12px 40px;
+            width: 100%;
+            grid-column: 1 / -1;
+            font-weight: bold;
+        }
+
+        .btn-add:hover {
+            background: #5568d3;
+        }
+
+        .lists-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .lists-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .list-tab {
+            padding: 10px 20px;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #666;
+        }
+
+        .list-tab.active {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .list-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .list-tab.active:hover {
+            background: #e55a25;
+        }
+
+        .items-list {
+            display: none;
+        }
+
+        .items-list.active {
+            display: block;
+        }
+
+        .item {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .item:hover {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .item-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-category {
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .item-recipe {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .btn-delete {
+            background: #ff4757;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #ff3838;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .selected-dish {
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -62,6 +341,8 @@
             <h1>🍽️ Gerador de Refeições</h1>
             <p>Não sabe o que comer? Deixa a app decidir por si.</p>
         </div>
+
+        <!-- Categorias -->
         <div class="categories">
             <div class="category-card active" data-category="Sopas">
                 <div class="category-icon">🍲</div>
@@ -79,6 +360,8 @@
                 <div class="category-count" id="count-Acompanhamento">0 itens</div>
             </div>
         </div>
+
+        <!-- Selector -->
         <div class="selector-section">
             <h2>Pronto para escolher?</h2>
             <div class="selected-dish" id="selectedDish"></div>
@@ -88,6 +371,8 @@
                 <button class="btn-select" onclick="selectRandom('Acompanhamento')">Escolher Acompanhamento</button>
             </div>
         </div>
+
+        <!-- Adicionar Item -->
         <div class="add-section">
             <h3>Adicionar Novo Item</h3>
             <div class="form-row">
@@ -110,6 +395,8 @@
             </div>
             <button class="btn-add" onclick="addDish()">Adicionar Item</button>
         </div>
+
+        <!-- Listas -->
         <div class="lists-section">
             <div class="lists-header">
                 <button class="list-tab active" onclick="showList('all')">Todas</button>
@@ -117,26 +404,215 @@
                 <button class="list-tab" onclick="showList('Prato Principal')">Pratos</button>
                 <button class="list-tab" onclick="showList('Acompanhamento')">Acomp.</button>
             </div>
+
             <div id="list-all" class="items-list active"></div>
             <div id="list-Sopas" class="items-list"></div>
             <div id="list-Prato Principal" class="items-list"></div>
             <div id="list-Acompanhamento" class="items-list"></div>
         </div>
     </div>
+
     <script>
-        let dishes = {'Sopas': [], 'Prato Principal': [], 'Acompanhamento': []};
-        function loadData() { const saved = localStorage.getItem('dishes'); if (saved) { dishes = JSON.parse(saved); updateDisplay(); } }
-        function saveData() { localStorage.setItem('dishes', JSON.stringify(dishes)); }
-        function addDish() { const name = document.getElementById('dishName').value.trim(); const category = document.getElementById('dishCategory').value; const recipe = document.getElementById('dishRecipe').value.trim(); if (!name) { alert('Por favor, escreve o nome do prato!'); return; } const dish = {id: Date.now(), name: name, recipe: recipe}; dishes[category].push(dish); saveData(); updateDisplay(); document.getElementById('dishName').value = ''; document.getElementById('dishRecipe').value = ''; document.getElementById('dishName').focus(); }
-        function removeDish(category, id) { dishes[category] = dishes[category].filter(d => d.id !== id); saveData(); updateDisplay(); }
-        function selectRandom(category) { const items = dishes[category]; if (items.length === 0) { document.getElementById('selectedDish').textContent = 'Não há ' + category.toLowerCase() + ' adicionados!'; return; } const random = items[Math.floor(Math.random() * items.length)]; document.getElementById('selectedDish').textContent = random.name; }
-        function showList(category) { document.querySelectorAll('.items-list').forEach(el => {el.classList.remove('active');}); document.querySelectorAll('.list-tab').forEach(el => {el.classList.remove('active');}); document.getElementById('list-' + (category === 'all' ? 'all' : category)).classList.add('active'); event.target.classList.add('active'); renderLists(); }
-        function renderLists() { let allHtml = ''; Object.entries(dishes).forEach(([category, items]) => {if (items.length > 0) { items.forEach(dish => {allHtml += createDishHtml(dish, category);}); }}); document.getElementById('list-all').innerHTML = allHtml || '<div class="empty-message">Nenhum item adicionado</div>'; Object.keys(dishes).forEach(category => {let html = ''; if (dishes[category].length > 0) { dishes[category].forEach(dish => {html += createDishHtml(dish, category);}); } else { html = '<div class="empty-message">Nenhum item nesta categoria</div>'; } document.getElementById('list-' + category).innerHTML = html; }); }
-        function createDishHtml(dish, category) { return `<div class="item"><div class="item-info"><h4>${dish.name}</h4><div class="item-category">${category}</div>${dish.recipe ? `<div class="item-recipe">${dish.recipe}</div>` : ''}</div><button class="btn-delete" onclick="removeDish('${category}', ${dish.id})">Remover</button></div>`; }
-        function updateDisplay() { Object.keys(dishes).forEach(category => {const count = dishes[category].length; const singular = count === 1 ? 'item' : 'itens'; document.getElementById('count-' + category).textContent = `${count} ${singular}`;}); renderLists(); }
-        document.querySelectorAll('.category-card').forEach(card => {card.addEventListener('click', function() {document.querySelectorAll('.category-card').forEach(c => {c.classList.remove('active');}); this.classList.add('active'); const category = this.dataset.category; showList(category);})});
-        document.getElementById('dishName').addEventListener('keypress', function(e) {if (e.key === 'Enter') addDish();});
-        loadData();
+        // Google Sheets URL - dados da tua sheet
+        const GOOGLE_SHEETS_URL = 'https://docs.google.com/spreadsheets/d/1CvqFaq91pK3wGkURJdFlf3-GqSmk2cNK-JL5VS3wdKo/export?format=csv';
+
+        // Estado da app
+        let dishes = {
+            'Sopas': [],
+            'Prato Principal': [],
+            'Acompanhamento': []
+        };
+
+        // Carrega dados do Google Sheets
+        async function loadDataFromSheets() {
+            try {
+                const response = await fetch(GOOGLE_SHEETS_URL);
+                const csv = await response.text();
+                parseCSV(csv);
+                updateDisplay();
+            } catch (error) {
+                console.log('Não conseguiu carregar do Sheets, usando localStorage...');
+                loadDataFromLocalStorage();
+            }
+        }
+
+        // Parse CSV
+        function parseCSV(csv) {
+            const lines = csv.trim().split('\n');
+            if (lines.length <= 1) return;
+            
+            lines.slice(1).forEach((line, index) => {
+                const parts = line.split(',').map(s => s.trim().replace(/^"(.*)"$/, '$1'));
+                const categoria = parts[0];
+                const nome = parts[1];
+                const receita = parts[2] || '';
+                
+                if (categoria && nome) {
+                    if (!dishes[categoria]) dishes[categoria] = [];
+                    dishes[categoria].push({
+                        id: Date.now() + index,
+                        name: nome,
+                        recipe: receita
+                    });
+                }
+            });
+        }
+
+        // Carrega dados do localStorage (fallback)
+        function loadDataFromLocalStorage() {
+            const saved = localStorage.getItem('dishes');
+            if (saved) {
+                dishes = JSON.parse(saved);
+                updateDisplay();
+            }
+        }
+
+        // Guarda dados no localStorage
+        function saveData() {
+            localStorage.setItem('dishes', JSON.stringify(dishes));
+        }
+
+        // Adiciona novo prato
+        function addDish() {
+            const name = document.getElementById('dishName').value.trim();
+            const category = document.getElementById('dishCategory').value;
+            const recipe = document.getElementById('dishRecipe').value.trim();
+
+            if (!name) {
+                alert('Por favor, escreve o nome do prato!');
+                return;
+            }
+
+            const dish = {
+                id: Date.now(),
+                name: name,
+                recipe: recipe
+            };
+
+            dishes[category].push(dish);
+            saveData();
+            updateDisplay();
+
+            // Limpa formulário
+            document.getElementById('dishName').value = '';
+            document.getElementById('dishRecipe').value = '';
+            document.getElementById('dishName').focus();
+        }
+
+        // Remove prato
+        function removeDish(category, id) {
+            dishes[category] = dishes[category].filter(d => d.id !== id);
+            saveData();
+            updateDisplay();
+        }
+
+        // Escolhe aleatoriamente
+        function selectRandom(category) {
+            const items = dishes[category];
+            if (items.length === 0) {
+                document.getElementById('selectedDish').textContent = 
+                    'Não há ' + category.toLowerCase() + ' adicionados!';
+                return;
+            }
+
+            const random = items[Math.floor(Math.random() * items.length)];
+            document.getElementById('selectedDish').textContent = random.name;
+        }
+
+        // Mostra lista
+        function showList(category) {
+            // Esconde todas
+            document.querySelectorAll('.items-list').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.list-tab').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Mostra selecionada
+            document.getElementById('list-' + (category === 'all' ? 'all' : category))
+                .classList.add('active');
+            event.target.classList.add('active');
+
+            renderLists();
+        }
+
+        // Renderiza listas
+        function renderLists() {
+            // Lista "Todas"
+            let allHtml = '';
+            Object.entries(dishes).forEach(([category, items]) => {
+                if (items.length > 0) {
+                    items.forEach(dish => {
+                        allHtml += createDishHtml(dish, category);
+                    });
+                }
+            });
+            document.getElementById('list-all').innerHTML = allHtml || 
+                '<div class="empty-message">Nenhum item adicionado</div>';
+
+            // Listas por categoria
+            Object.keys(dishes).forEach(category => {
+                let html = '';
+                if (dishes[category].length > 0) {
+                    dishes[category].forEach(dish => {
+                        html += createDishHtml(dish, category);
+                    });
+                } else {
+                    html = '<div class="empty-message">Nenhum item nesta categoria</div>';
+                }
+                document.getElementById('list-' + category).innerHTML = html;
+            });
+        }
+
+        // HTML de um prato
+        function createDishHtml(dish, category) {
+            return `
+                <div class="item">
+                    <div class="item-info">
+                        <h4>${dish.name}</h4>
+                        <div class="item-category">${category}</div>
+                        ${dish.recipe ? `<div class="item-recipe">${dish.recipe}</div>` : ''}
+                    </div>
+                    <button class="btn-delete" onclick="removeDish('${category}', ${dish.id})">
+                        Remover
+                    </button>
+                </div>
+            `;
+        }
+
+        // Atualiza display
+        function updateDisplay() {
+            // Atualiza contadores
+            Object.keys(dishes).forEach(category => {
+                const count = dishes[category].length;
+                const singular = count === 1 ? 'item' : 'itens';
+                document.getElementById('count-' + category).textContent = 
+                    `${count} ${singular}`;
+            });
+
+            renderLists();
+        }
+
+        // Clica em categoria para filtrar
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.category-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+                this.classList.add('active');
+                const category = this.dataset.category;
+                showList(category);
+            });
+        });
+
+        // Enter em input de nome
+        document.getElementById('dishName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addDish();
+        });
+
+        // Carrega dados ao iniciar
+        loadDataFromSheets();
     </script>
 </body>
 </html>
