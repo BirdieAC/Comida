@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -457,18 +458,24 @@
             }
         }
 
-        // Parse CSV
+        // Parse CSV (Google Sheets usa TAB como separador)
         function parseCSV(csv) {
             const lines = csv.trim().split('\n');
             if (lines.length <= 1) return;
             
             lines.slice(1).forEach((line, index) => {
-                const parts = line.split(',').map(s => s.trim().replace(/^"(.*)"$/, '$1'));
+                // Tenta primeiro com TAB (Google Sheets), depois com VÍRGULA
+                let parts = line.split('\t');
+                if (parts.length < 2) {
+                    parts = line.split(',');
+                }
+                
+                parts = parts.map(s => s.trim().replace(/^"(.*)"$/, '$1'));
                 const categoria = parts[0];
                 const nome = parts[1];
                 const receita = parts[2] || '';
                 
-                if (categoria && nome) {
+                if (categoria && nome && categoria !== 'Categoria') {
                     if (!dishes[categoria]) dishes[categoria] = [];
                     dishes[categoria].push({
                         id: Date.now() + index,
@@ -588,13 +595,13 @@
 
         // HTML de um prato
         function createDishHtml(dish, category) {
-            const recipeBtn = dish.recipe ? `<button class="btn-recipe" onclick="toggleRecipe(${dish.id})">Ver Receita</button>` : '';
+            const recipeBtn = dish.recipe ? `<button class="btn-recipe" onclick="toggleRecipe(${dish.id})">📖 Ver Receita</button>` : '';
             return `
                 <div class="item">
                     <div class="item-info">
                         <h4>${dish.name}</h4>
                         <div class="item-category">${category}</div>
-                        ${dish.recipe ? `<div class="item-recipe" id="recipe-${dish.id}">${dish.recipe}</div>` : ''}
+                        ${dish.recipe ? `<div class="item-recipe" id="recipe-${dish.id}"><strong>Receita:</strong> ${dish.recipe}</div>` : ''}
                         ${recipeBtn}
                     </div>
                     <button class="btn-delete" onclick="removeDish('${category}', ${dish.id})">
