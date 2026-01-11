@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -32,12 +32,13 @@
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            color: #ff6b35;
+            color: #4a4a4a;
         }
 
         .header p {
             font-size: 1.1em;
             opacity: 0.9;
+            color: #666;
         }
 
         .categories {
@@ -101,7 +102,7 @@
 
         .selected-dish {
             font-size: 2.5em;
-            color: #ff6b35;
+            color: #5a7c8c;
             margin-bottom: 20px;
             min-height: 60px;
             display: flex;
@@ -127,14 +128,14 @@
         }
 
         .btn-select {
-            background: #ff6b35;
+            background: #6b7c7c;
             color: white;
             flex: 1;
             min-width: 200px;
         }
 
         .btn-select:hover {
-            background: #e55a25;
+            background: #576666;
             transform: scale(1.05);
         }
 
@@ -202,7 +203,7 @@
         }
 
         .btn-add {
-            background: #667eea;
+            background: #6b7c7c;
             color: white;
             padding: 12px 40px;
             width: 100%;
@@ -211,7 +212,7 @@
         }
 
         .btn-add:hover {
-            background: #5568d3;
+            background: #576666;
         }
 
         .lists-section {
@@ -240,7 +241,7 @@
         }
 
         .list-tab.active {
-            background: #ff6b35;
+            background: #6b7c7c;
             color: white;
         }
 
@@ -249,7 +250,7 @@
         }
 
         .list-tab.active:hover {
-            background: #e55a25;
+            background: #576666;
         }
 
         .items-list {
@@ -300,7 +301,7 @@
         }
 
         .btn-recipe {
-            background: #ff6b35;
+            background: #8b9fa3;
             color: white;
             padding: 6px 12px;
             border: none;
@@ -312,7 +313,7 @@
         }
 
         .btn-recipe:hover {
-            background: #e55a25;
+            background: #6b7c7c;
         }
 
         /* Modal styles */
@@ -379,7 +380,7 @@
         }
 
         .modal-title {
-            color: #ff6b35;
+            color: #5a7c8c;
             font-size: 1.6em;
             margin-bottom: 20px;
             display: flex;
@@ -415,7 +416,7 @@
             content: "●";
             position: absolute;
             left: 0;
-            color: #ff6b35;
+            color: #6b7c7c;
         }
 
         .modal-footer {
@@ -424,7 +425,7 @@
         }
 
         .btn-close-modal {
-            background: #667eea;
+            background: #6b7c7c;
             color: white;
             padding: 12px 40px;
             border: none;
@@ -436,7 +437,7 @@
         }
 
         .btn-close-modal:hover {
-            background: #5568d3;
+            background: #576666;
         }
 
         .btn-delete {
@@ -517,41 +518,6 @@
             </div>
         </div>
 
-        <!-- Adicionar Item -->
-        <div class="add-section">
-            <h3>Adicionar Novo Item</h3>
-            <div class="form-row">
-                <div>
-                    <label for="dishName">Nome do prato ou sopa:</label>
-                    <input type="text" id="dishName" placeholder="Ex: Caldo Verde">
-                </div>
-                <div>
-                    <label for="dishCategory">Categoria:</label>
-                    <select id="dishCategory">
-                        <option>Sopas</option>
-                        <option>Prato Principal</option>
-                        <option>Acompanhamento</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="dishRecipe">Receita (opcional):</label>
-                <textarea id="dishRecipe" placeholder="Escreve a receita ou notas sobre este prato..."></textarea>
-            </div>
-            <button class="btn-add" onclick="addDish()">Adicionar Item</button>
-        </div>
-
-        <!-- Modal para Receita -->
-        <div id="recipeModal" class="modal">
-            <div class="modal-content">
-                <button class="modal-close" onclick="closeRecipeModal()">&times;</button>
-                <div id="modalBody"></div>
-                <div class="modal-footer">
-                    <button class="btn-close-modal" onclick="closeRecipeModal()">Fechar</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Listas -->
         <div class="lists-section">
             <div class="lists-header">
@@ -566,6 +532,18 @@
             <div id="list-Prato Principal" class="items-list"></div>
             <div id="list-Acompanhamento" class="items-list"></div>
         </div>
+
+        <!-- Modal para Receita -->
+        <div id="recipeModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeRecipeModal()">&times;</button>
+                <div id="modalBody"></div>
+                <div class="modal-footer">
+                    <button class="btn-close-modal" onclick="closeRecipeModal()">Fechar</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
