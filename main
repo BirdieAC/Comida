@@ -729,12 +729,13 @@
 
         // HTML de um prato
         function createDishHtml(dish, category) {
-            const recipeBtn = dish.recipe ? `<button class="btn-recipe" onclick="openRecipeModal(${dish.id}, '${dish.name.replace(/'/g, "\\'")}', '${dish.recipe.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">📖 Ver Receita</button>` : '';
+            const recipeBtn = dish.recipe ? `<button class="btn-recipe" onclick="toggleRecipe(${dish.id})">📖 Ver Receita</button>` : '';
             return `
                 <div class="item">
                     <div class="item-info">
                         <h4>${dish.name}</h4>
                         <div class="item-category">${category}</div>
+                        ${dish.recipe ? `<div class="item-recipe" id="recipe-${dish.id}">Receita: ${dish.recipe}</div>` : ''}
                         ${recipeBtn}
                     </div>
                     <button class="btn-delete" onclick="removeDish('${category}', ${dish.id})">
@@ -769,70 +770,13 @@
             });
         });
 
-        // Abre modal com receita
-        function openRecipeModal(dishId, dishName, recipeText) {
-            const modal = document.getElementById('recipeModal');
-            const modalBody = document.getElementById('modalBody');
-            
-            // Formata a receita
-            let formattedRecipe = formatRecipe(recipeText);
-            
-            modalBody.innerHTML = `
-                <div class="modal-title">
-                    📖 Receita: ${dishName}
-                </div>
-                ${formattedRecipe}
-            `;
-            
-            modal.classList.add('active');
-        }
-
-        // Fecha modal
-        function closeRecipeModal() {
-            const modal = document.getElementById('recipeModal');
-            modal.classList.remove('active');
-        }
-
-        // Formata receita em seções
-        function formatRecipe(recipeText) {
-            if (!recipeText) return '';
-            
-            let html = '';
-            const sections = recipeText.split(/\n\n+/);
-            
-            sections.forEach(section => {
-                const lines = section.trim().split('\n');
-                const title = lines[0].toLowerCase();
-                const isIngredients = title.includes('ingrediente');
-                const isRecipe = title.includes('receita') || title.includes('modo');
-                
-                if (isIngredients || isRecipe) {
-                    const sectionTitle = lines[0];
-                    const items = lines.slice(1);
-                    
-                    html += `
-                        <div class="modal-section">
-                            <h3>${sectionTitle}</h3>
-                            <ul>
-                                ${items.map(item => item.trim() ? `<li>${item.trim()}</li>` : '').join('')}
-                            </ul>
-                        </div>
-                    `;
-                } else {
-                    html += `<div class="modal-section"><p style="color: #666; line-height: 1.6;">${section.trim().replace(/\n/g, '<br>')}</p></div>`;
-                }
-            });
-            
-            return html;
-        }
-
-        // Fecha modal ao clicar fora
-        document.addEventListener('click', function(event) {
-            const modal = document.getElementById('recipeModal');
-            if (event.target === modal) {
-                closeRecipeModal();
+        // Toggle receita
+        function toggleRecipe(dishId) {
+            const recipeEl = document.getElementById(`recipe-${dishId}`);
+            if (recipeEl) {
+                recipeEl.classList.toggle('active');
             }
-        });
+        }
 
         // Enter em input de nome
         document.getElementById('dishName').addEventListener('keypress', function(e) {
